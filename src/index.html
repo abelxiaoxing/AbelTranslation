@@ -9,14 +9,6 @@
     <div class="container">
       <h1>LLM翻译软件</h1>
       
-      <!-- API密钥设置区域 -->
-      <div class="section">
-        <h2>API设置</h2>
-        <label for="api-key">API密钥:</label>
-        <input type="password" id="api-key" placeholder="请输入您的API密钥" />
-        <button id="save-api-key">保存密钥</button>
-      </div>
-      
       <!-- 翻译区域 -->
       <div class="section">
         <h2>文本翻译</h2>
@@ -51,7 +43,19 @@
       
       <!-- 设置区域 -->
       <div class="section">
-        <h2>默认设置</h2>
+        <h2>设置</h2>
+        <label for="hostname">Hostname:</label>
+        <input type="text" id="hostname" placeholder="例如: api.mistral.ai" />
+        
+        <label for="model">Model:</label>
+        <input type="text" id="model" placeholder="例如: mistral-small-latest" />
+
+        <label for="api-key">API密钥:</label>
+        <input type="password" id="api-key" placeholder="请输入您的API密钥" />
+
+        <label for="hotkey">快捷键:</label>
+        <input type="text" id="hotkey" placeholder="例如: Alt+E" />
+
         <label for="default-source-language">默认源语言:</label>
         <select id="default-source-language">
           <option value="auto">自动检测</option>
@@ -68,8 +72,8 @@
           <option value="ja">日文</option>
           <option value="ko">韩文</option>
         </select>
-        
-        <button id="save-default-settings">保存默认设置</button>
+
+        <button id="save-settings">保存设置</button>
       </div>
     </div>
     

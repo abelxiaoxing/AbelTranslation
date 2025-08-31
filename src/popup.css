@@ -1,0 +1,64 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: sans-serif;
+  background-color: #282c34;
+  color: #f0f0f0;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#drag-bar {
+  height: 20px;
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+}
+
+#container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px 10px 10px; /* Adjust padding since drag-bar is outside */
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: 0; /* Important for flexbox children with overflow */
+}
+
+.text-box {
+  flex: 1;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #3a3f4b;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-y: auto;
+  border: 1px solid #444;
+}
+
+#original-text {
+  border-left: 3px solid #007bff;
+}
+
+#translated-text {
+  border-left: 3px solid #28a745;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #282c34;
+}
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}

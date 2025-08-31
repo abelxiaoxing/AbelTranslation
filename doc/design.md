@@ -18,53 +18,70 @@
 - **主进程 (Main Process)**: 
   - 入口文件: `src/index.js`
   - 职责: 创建和管理浏览器窗口，处理应用生命周期事件，安全地存储和检索API密钥
-- **渲染进程 (Renderer Process)**:
+- **主渲染进程 (Main Renderer Process)**:
   - 入口文件: `src/index.html`, `src/index.css`, `src/renderer.js`
-  - 职责: 展示用户界面，处理用户交互，通过IPC与主进程通信以获取密钥和发起API请求
+  - 职责: 展示主设置界面，处理用户交互，通过IPC与主进程通信。
+- **弹出窗口渲染进程 (Popup Renderer Process)**:
+  - 入口文件: `src/popup.html`, `src/popup.css`, `src/popup.js`
+  - 职责: 展示快捷键翻译结果，是一个无边框、置顶的窗口。
 
 ### 3. 数据流
-1. 用户在渲染进程的界面中输入文本并选择语言。
-2. 渲染进程通过IPC向主进程发送翻译请求（包含文本、源语言、目标语言）。
-3. 主进程从安全存储中读取API密钥。
+**主窗口翻译流程:**
+1. 用户在主渲染进程的界面中输入文本并选择语言。
+2. 主渲染进程通过IPC向主进程发送翻译请求。
+3. 主进程从安全存储中读取API密钥和配置。
 4. 主进程构建API请求并发送到LLM服务。
-5. 主进程接收API响应并将翻译结果通过IPC发送回渲染进程。
-6. 渲染进程更新界面显示翻译结果。
+5. 主进程接收API响应并将翻译结果通过IPC发送回主渲染进程。
+6. 主渲染进程更新界面显示翻译结果。
+
+**快捷键翻译流程:**
+1. 用户在操作系统任意位置复制文本，然后按下预设的全局快捷键。
+2. 主进程捕获快捷键事件，并从系统剪贴板读取文本。
+3. 主进程读取API配置，调用翻译核心逻辑。
+4. 主进程将原始文本和翻译结果通过IPC发送到弹出窗口渲染进程。
+5. 弹出窗口渲染进程接收到数据并将其展示出来。
+6. 弹出窗口根据内容自动调整大小，并在失去焦点时自动隐藏。
 
 ## Components and Interfaces
 
 ### 1. 主进程组件 (`src/index.js`)
-- **BrowserWindow管理**:
-  - `createWindow()`: 创建应用主窗口
-  - `app.whenReady()`: 应用准备就绪时创建窗口
-  - `app.on('window-all-closed')`: 处理窗口关闭事件
+- **窗口管理**:
+  - `createWindow()`: 创建应用主窗口。
+  - `createPopupWindow()`: 创建无边框、置顶的翻译结果弹出窗口。
+  - `createTray()`: 创建系统托盘图标及菜单。
+- **全局快捷键管理**:
+  - `registerGlobalShortcut()`: 注册/更新用户自定义的全局快捷键。
+  - 快捷键回调函数负责读取剪贴板、调用翻译、显示弹出窗口。
 - **IPC处理**:
-  - 监听来自渲染进程的`translate`事件
-  - 使用`keytar`获取API密钥
-  - 调用`translateText`函数处理翻译逻辑
-  - 将结果或错误通过IPC发送回渲染进程
-- **API密钥管理**:
-  - 监听`save-api-key`事件以保存密钥
-  - 监听`get-api-key`事件以获取密钥
+  - 监听和处理来自主渲染进程的设置保存/读取、文本翻译请求。
+  - 向弹出窗口渲染进程发送`translation-data`事件，传递翻译结果。
+  - 监听来自弹出窗口的`popup-resize`事件，以调整窗口高度。
+- **API密钥与配置管理**:
+  - 使用`keytar`安全存取API密钥。
+  - 使用`electron-store`存取主机、模型、快捷键、默认语言等配置。
 
-### 2. 渲染进程组件
+### 2. 主渲染进程组件
 - **HTML结构** (`src/index.html`):
-  - 文本输入区域 (`<textarea>`)
-  - 源语言和目标语言选择下拉菜单 (`<select>`)
-  - 翻译按钮 (`<button>`)
-  - 结果显示区域 (`<div>`)
-  - 设置区域（API密钥输入和保存）
+  - 包含翻译区域和完整的设置区域（API密钥、模型、快捷键等）。
 - **CSS样式** (`src/index.css`):
-  - 定义界面布局和样式
+  - 定义主窗口的界面布局和样式。
 - **JavaScript逻辑** (`src/renderer.js`):
-  - 通过`document.getElementById`等方法获取DOM元素
-  - 为翻译按钮添加点击事件监听器
-  - 通过IPC向主进程发送翻译请求
-  - 监听主进程返回的翻译结果并更新界面
-  - 处理API密钥的输入和保存
+  - 处理翻译输入和按钮点击。
+  - 处理所有设置项的读取和保存。
+  - 通过预加载脚本与主进程进行IPC通信。
+- **预加载脚本** (`src/preload.js`):
+  - 使用`contextBridge`暴露`translateText`, `saveSettings`, `getSettings`等接口。
 
-### 3. 预加载脚本 (`src/preload.js`)
-- 使用`contextBridge`和`ipcRenderer`暴露安全的IPC接口给渲染进程
-- 暴露`translate`和`saveApiKey`等方法
+### 3. 弹出窗口渲染进程组件
+- **HTML结构** (`src/popup.html`):
+  - 包含一个可拖拽区域和两个用于显示原文和译文的`div`。
+- **CSS样式** (`src/popup.css`):
+  - 定义弹出窗口的深色、紧凑布局和自定义滚动条。
+- **JavaScript逻辑** (`src/popup.js`):
+  - 监听主进程通过`translation-data`事件发送来的数据并更新UI。
+  - 在内容更新后，计算并通知主进程调整窗口高度。
+- **预加载脚本** (`src/popup-preload.js`):
+  - 暴露`onTranslationData`用于接收数据，`resizePopup`用于通知主进程调整大小。
 
 ## Data Models
 
