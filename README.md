@@ -56,13 +56,18 @@
 
 # 学习记录
 1. 安装环境
+换electron源和pnpm源
+```
+pnpm config set registry https://registry.npmmirror.com
+pnpm config set electron_mirror https://npmmirror.com/mirrors/electron/
+```
+如果为win11则还需单独从`c://Users/xxxxx/.npmrc`手动添加如下内容  
+`electron_mirror=https://npmmirror.com/mirrors/electron/`  
+`registry=https://registry.npmmirror.com`  
+执行安装  
 ```
 pnpm create electron-app AbelTranslate
 cd AbelTranslate
-# 换electron源和pnpm源
-pnpm config set registry https://registry.npm.taobao.org
-pnpm config set electron_mirror https://npm.taobao.org/mirrors/electron/
-# 如果为win11则还需单独从`c://Users/xxxxx/.npmrc`手动添加`electron_mirror=https://npm.taobao.org/mirrors/electron/`和`registry=https://registry.npm.taobao.org`
 pnpm install
 pnpm start
 ```

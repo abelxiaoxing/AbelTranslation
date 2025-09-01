@@ -1,0 +1,20 @@
+[10:08:00:577] [4781:000012b1] [WARN][com.freerdp.core.nego] - [nego_enable_aad]: This build does not support AAD security, disabling.
+[10:08:00:846] [4781:000012b1] [WARN][com.freerdp.crypto] - [verify_cb]: Certificate verification failure 'self-signed certificate (18)' at stack position 0
+[10:08:00:846] [4781:000012b1] [WARN][com.freerdp.crypto] - [verify_cb]: CN = DESKTOP-UFKV8LH
+[10:08:00:850] [4781:000012b1] [ERROR][com.winpr.sspi.Kerberos] - [kerberos_AcquireCredentialsHandleA]: krb5_parse_name (Configuration file does not specify default realm [-1765328160])
+[10:08:00:850] [4781:000012b1] [ERROR][com.winpr.sspi.Kerberos] - [kerberos_AcquireCredentialsHandleA]: krb5_parse_name (Configuration file does not specify default realm [-1765328160])
+[10:08:01:206] [4781:000012b1] [WARN][com.freerdp.core.license] - [license_read_binary_blob_data]: license binary blob::type BB_ERROR_BLOB, length=0, skipping.
+[10:13:02:11] [4781:000012c1] [WARN][com.freerdp.channels.rdpsnd.client] - [rdpsnd_check_pulse]: pulse->stream=(nil)
+[10:13:02:413] [4781:000012b1] [ERROR][com.freerdp.core] - [rdp_set_error_info]: ERRINFO_LOGOFF_BY_USER [0x0001000C]
+[10:08:00:577] [4781:000012b1] [INFO][com.freerdp.core.proxy] - [proxy_parse_uri]: Parsed proxy configuration: http://127.0.0.1:7890
+[10:08:00:578] [4781:000012b1] [INFO][com.freerdp.core.proxy] - [http_proxy_connect]: HTTP Proxy: HTTP/1.1 200 Connection established
+[10:08:01:171] [4781:000012b1] [INFO][com.winpr.timezone] - [winpr_detect_windows_time_zone]: tzid: Asia/Shanghai
+[10:08:01:415] [4781:000012b1] [INFO][com.freerdp.gdi] - [gdi_init_ex]: Local framebuffer format  PIXEL_FORMAT_BGRX32
+[10:08:01:415] [4781:000012b1] [INFO][com.freerdp.gdi] - [gdi_init_ex]: Remote framebuffer format PIXEL_FORMAT_BGRA32
+[10:08:01:435] [4781:000012b1] [INFO][com.freerdp.channels.rdpsnd.client] - [rdpsnd_load_device_plugin]: [static] Loaded pulse backend for rdpsnd
+[10:08:01:435] [4781:000012b1] [INFO][com.freerdp.channels.drdynvc.client] - [dvcman_load_addin]: Loading Dynamic Virtual Channel rdpsnd
+[10:08:01:435] [4781:000012b1] [INFO][com.freerdp.channels.drdynvc.client] - [dvcman_load_addin]: Loading Dynamic Virtual Channel ainput
+[10:08:01:436] [4781:000012b1] [INFO][com.freerdp.channels.drdynvc.client] - [dvcman_load_addin]: Loading Dynamic Virtual Channel rdpgfx
+[10:08:01:715] [4781:000012c1] [INFO][com.freerdp.channels.rdpsnd.client] - [rdpsnd_load_device_plugin]: [dynamic] Loaded pulse backend for rdpsnd
+[10:08:03:207] [4781:000012c1] [INFO][com.freerdp.channels.rdpsnd.client] - [rdpsnd_load_device_plugin]: [dynamic] Loaded pulse backend for rdpsnd
+[10:13:02:413] [4781:000012b1] [INFO][com.freerdp.core] - [rdp_print_errinfo]: ERRINFO_LOGOFF_BY_USER (0x0000000C):The disconnection was initiated by the user logging off their session on the server.
